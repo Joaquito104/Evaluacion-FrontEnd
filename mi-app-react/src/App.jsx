@@ -16,7 +16,6 @@ function App() {
         <a href="#" id='Estats '>Estadisticas</a> |
         <a href="#" id='Api '>Informacion</a>
       </nav>
-        
     </>
   )
 }

@@ -6,6 +6,7 @@ function App() {
     <>
       <h1>Reciclaje de Hogares</h1>
       <Menu />
+      <footer>Desarrollado con fines educativos</footer>
     </>
   );
 }

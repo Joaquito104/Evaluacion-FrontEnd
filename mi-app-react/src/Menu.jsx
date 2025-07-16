@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Inicio from './Inicio.jsx';
 import Registros from './Registros.jsx';
-import Objetivos from './Objetivos.jsx';
+import Metas from './Metas.jsx';
 import Estadisticas from './Estadisticas.jsx';
 import Api from './Api.jsx';
 
@@ -15,11 +15,11 @@ const Menu = () => {
         return <Inicio />; //Se mantiene o vuelve al menu
       case "Registros":
         return <Registros />;
-      case "Objetivos":
-        return <Objetivos />;
-      case "Estats":
+      case "Metas":
+        return <Metas/>;
+      case "Estadisticas":
         return <Estadisticas />;
-      case "Api":
+      case "Información":
         return <Api />;
     }
   };
@@ -30,13 +30,13 @@ const Menu = () => {
       <nav>
         <a href="#" onClick={() => setSeccionActiva("Inicio")}>Inicio</a> |
         <a href="#" onClick={() => setSeccionActiva("Registros")}>Registros</a> |
-        <a href="#" onClick={() => setSeccionActiva("Objetivos")}>Logros o metas</a> |
-        <a href="#" onClick={() => setSeccionActiva("Estats")}>Estadísticas</a> |
-        <a href="#" onClick={() => setSeccionActiva("Api")}>Información</a>
+        <a href="#" onClick={() => setSeccionActiva("Metas")}>Metas</a> |
+        <a href="#" onClick={() => setSeccionActiva("Estadisticas")}>Estadísticas</a> |
+        <a href="#" onClick={() => setSeccionActiva("Información")}>Información</a>
       </nav>
 
       <div>
-        <h2>Usted se encuentra: {seccionActiva}</h2>
+        <h2><strong>Usted se encuentra: {seccionActiva}</strong></h2>
         {renderSeccion()}
       </div>
     </>

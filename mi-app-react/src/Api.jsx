@@ -1,3 +1,4 @@
+/* JSX DE LA API*/
 import React from 'react'
 
 const Api = () => {

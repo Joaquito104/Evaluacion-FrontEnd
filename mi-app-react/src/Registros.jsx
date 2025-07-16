@@ -1,12 +1,86 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import Estadisticas from './Estadisticas'; 
 
 function Registros() {
   const [material, setMaterial] = useState('');
   const [cantidad, setCantidad] = useState('');
   const [fecha, setFecha] = useState('');
   const [registros, setRegistros] = useState([]);
+  const [estadisticas, setEstadisticas] = useState([
+    {
+      numero: 1,
+      indicador: "Kg de residuos por hogar/mes",
+      valorActual: 20, 
+      valorMeta: 10,
+      progreso: 0,
+    },
+    {
+      numero: 2,
+      indicador: "% de residuos reciclados",
+      valorActual: 40, 
+      valorMeta: 60,
+      progreso: 0,
+    },
+    {
+      numero: 3,
+      indicador: "% de hogares compostando",
+      valorActual: 30,
+      valorMeta: 60,
+      progreso: 0,
+    },
+    {
+      numero: 4,
+      indicador: "% de hogares con hábito regular",
+      valorActual: 50,
+      valorMeta: 80,
+      progreso: 0,
+    },
+    {
+      numero: 5,
+      indicador: "Nº de puntos instalados",
+      valorActual: 2,
+      valorMeta: 10,
+      progreso: 0,
+    },
+    {
+      numero: 6,
+      indicador: "Nº de campañas realizadas",
+      valorActual: 2,
+      valorMeta: 12,
+      progreso: 0,
+    },
+    {
+      numero: 7,
+      indicador: "% de hogares con sensores",
+      valorActual: 0,
+      valorMeta: 20,
+      progreso: 0,
+    },
+    {
+      numero: 8,
+      indicador: "Nº de hogares premiados",
+      valorActual: 0,
+      valorMeta: 100,
+      progreso: 0,
+    },
+    {
+      numero: 9,
+      indicador: "% de nuevos capacitados",
+      valorActual: "—",
+      valorMeta: "100%",
+      progreso: 0,
+    },
+    {
+      numero: 10,
+      indicador: "% de reducción",
+      valorActual: "0%",
+      valorMeta: "30% menos",
+      progreso: 0,
+    },
+  ]);
 
+  
   useEffect(() => {
     try {
       const storedRegistros = localStorage.getItem('registrosReciclaje');
@@ -18,17 +92,20 @@ function Registros() {
     }
   }, []);
 
+  
   useEffect(() => {
     try {
       localStorage.setItem('registrosReciclaje', JSON.stringify(registros));
+      localStorage.setItem('estadisticas', JSON.stringify(estadisticas));
     } catch (error) {
       console.error("Error al guardar datos en Local Storage:", error);
     }
-  }, [registros]);
+  }, [registros, estadisticas]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+   
     if (!material || !cantidad || !fecha || parseFloat(cantidad) <= 0) {
       alert('Por favor, completa todos los campos correctamente. La cantidad debe ser un número positivo.');
       return;
@@ -41,11 +118,46 @@ function Registros() {
       fecha,
     };
 
-    setRegistros((prevRegistros) => [...prevRegistros, nuevoRegistro]);
+
+    setRegistros((prevRegistros) => {
+      const nuevosRegistros = [...prevRegistros, nuevoRegistro];
+      actualizarEstadisticas(nuevosRegistros); 
+      return nuevosRegistros;
+    });
+
 
     setMaterial('');
     setCantidad('');
     setFecha('');
+  };
+
+
+  const actualizarEstadisticas = (registros) => {
+    let totalResiduos = 0;
+    let residuosReciclados = 0;
+
+
+    registros.forEach((registro) => {
+      totalResiduos += registro.cantidad;
+      if (['plastico', 'papel', 'vidrio', 'metal'].includes(registro.material)) {
+        residuosReciclados += registro.cantidad;
+      }
+    });
+
+ 
+    setEstadisticas((prevEstadisticas) => {
+      return prevEstadisticas.map((item) => {
+        if (item.indicador === "Kg de residuos por hogar/mes") {
+          item.valorActual = totalResiduos / registros.length; 
+          item.progreso = (item.valorActual / item.valorMeta) * 100;
+        }
+        if (item.indicador === "% de residuos reciclados") {
+          item.valorActual = (residuosReciclados / totalResiduos) * 100;
+          item.progreso = item.valorActual;
+        }
+        return item;
+      });
+    });
   };
 
   return (
@@ -113,7 +225,7 @@ function Registros() {
 
       <section className="estadisticas">
         <h2>Estadísticas de Reciclaje</h2>
-        <p>Las estadísticas y gráficos se mostrarán aquí en futuros pasos.</p>
+        <Estadisticas estadisticas={estadisticas} />
       </section>
     </div>
   );

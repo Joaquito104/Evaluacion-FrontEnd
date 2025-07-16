@@ -1,49 +1,16 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+import Menu from './Menu.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
+function App() {
+
+  return (
+    <>
+      <h1>Reciclaje de Hogares</h1>
+      <Menu />
+      <footer>Desarrollado con fines educativos</footer>
+    </>
+  );
 }
 
-
-/* Clases sin tilde ni espacio */
-
-.inicio {
-  background-image: linear-gradient(to right, rgba(6, 83, 54, 0.411), rgba(6, 83, 54, 0.411)),
-    url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6");
-}
-
-.registros {
-  background-image: linear-gradient(to right, rgb(3, 184, 255), rgb(8, 112, 248)),
-    url("https://images.unsplash.com/photo-1590420891914-7d671141a231");
-}
-
-.metas {
-  background-image: linear-gradient(to right, rgb(251, 255, 0), rgb(21, 255, 0)),
-    url("https://images.unsplash.com/photo-1542826438-5ec1caaa65b2");
-}
-
-.estadisticas {
-  background-image: linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.2)),
-    url("https://images.unsplash.com/photo-1579546929518-9e396f3cc809");
-}
-
-.informacion {
-  background-image: linear-gradient(to right, rgb(0, 236, 253), rgb(2, 2, 2)),
-    url("https://images.unsplash.com/photo-1603825351529-54fd64ba00f2");
-}
-
-nav {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-nav a {
-  margin: 0 0.5rem;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 5px black;
-}
-
+export default App;
 
 

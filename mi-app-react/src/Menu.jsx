@@ -12,7 +12,7 @@ const Menu = () => {
   const renderSeccion = () => {
     switch (seccionActiva) {
       case "Inicio":
-        return <Inicio />;
+        return <Inicio />; //Se mantiene o vuelve al menu
       case "Registros":
         return <Registros />;
       case "Objetivos":
@@ -26,6 +26,7 @@ const Menu = () => {
 
   return (
     <>
+
       <nav>
         <a href="#" onClick={() => setSeccionActiva("Inicio")}>Inicio</a> |
         <a href="#" onClick={() => setSeccionActiva("Registros")}>Registros</a> |
@@ -35,7 +36,7 @@ const Menu = () => {
       </nav>
 
       <div>
-        <h2>Sección activa: {seccionActiva}</h2>
+        <h2>Usted se encuentra: {seccionActiva}</h2>
         {renderSeccion()}
       </div>
     </>

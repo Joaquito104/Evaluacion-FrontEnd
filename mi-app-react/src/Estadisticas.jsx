@@ -6,4 +6,5 @@ const Estadisticas = () => {
   )
 }
 
+
 export default Estadisticas

@@ -1,94 +1,65 @@
-import React from 'react';
-import Registros from './Registros';
+import { useEffect, useState } from "react";
+import { Table, ProgressBar, Container } from "react-bootstrap";
 
-const metas = [
-  {
-    numero: 1,
-    meta: "Disminuir generación total de residuos",
-    responsable: "Coordinador ambiental",
-    plazo: "Dic 2025"
-  },
-  {
-    numero: 2,
-    meta: "Aumentar tasa de reciclaje",
-    responsable: "Equipo técnico",
-    plazo: "Dic 2025"
-  },
-  {
-    numero: 3,
-    meta: "Ampliar compostaje domiciliario",
-    responsable: "Promotores ambientales",
-    plazo: "Mar 2026"
-  },
-  {
-    numero: 4,
-    meta: "Incrementar uso de productos reutilizables",
-    responsable: "Educadores",
-    plazo: "Nov 2025"
-  },
-  {
-    numero: 5,
-    meta: "Crear puntos de acopio por barrio",
-    responsable: "Logística y barrios",
-    plazo: "Dic 2025"
-  },
-  {
-    numero: 6,
-    meta: "Realizar campañas educativas",
-    responsable: "Comunicaciones",
-    plazo: "Dic 2025"
-  },
-  {
-    numero: 7,
-    meta: "Monitoreo digital de reciclaje",
-    responsable: "Innovación",
-    plazo: "Jun 2026"
-  },
-  {
-    numero: 8,
-    meta: "Incentivar hogares recicladores",
-    responsable: "Coordinador del plan",
-    plazo: "Ene 2026"
-  },
-  {
-    numero: 9,
-    meta: "Capacitar nuevos integrantes",
-    responsable: "Facilitadores",
-    plazo: "Permanente"
-  },
-  {
-    numero: 10,
-    meta: "Reducir residuos no reciclables",
-    responsable: "Coordinador ambiental",
-    plazo: "—"
-  }
+const metasPredefinidas = [
+  { id: 1, descripcion: "Reciclar 50 kg de Plástico", tipo: "Plástico", objetivo: 50 },
+  { id: 2, descripcion: "Reciclar 30 kg de Papel", tipo: "Papel", objetivo: 30 },
+  { id: 3, descripcion: "Reciclar 20 kg de Vidrio", tipo: "Vidrio", objetivo: 20 },
+  { id: 4, descripcion: "Reciclar 15 kg de Metal", tipo: "Metal", objetivo: 15 },
 ];
 
-const Metas = () => {
+export default function Metas() {
+  const [totales, setTotales] = useState({});
+
+  useEffect(() => {
+    const registros = JSON.parse(localStorage.getItem("reciclaje")) || [];
+    const acumulados = {};
+
+    registros.forEach((item) => {
+      acumulados[item.tipo] = (acumulados[item.tipo] || 0) + item.cantidad;
+    });
+
+    setTotales(acumulados);
+  }, []);
+
+  const calcularProgreso = (tipo, objetivo) => {
+    const cantidadActual = totales[tipo] || 0;
+    return Math.min((cantidadActual / objetivo) * 100, 100);
+  };
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Nº</th>
-          <th>Meta</th>
-          <th>Responsable</th>
-          <th>Plazo</th>
-        </tr>
-      </thead>
-      <tbody>
-        {metas.map((meta) => (
-          <tr key={meta.numero}>
-            <td>{meta.numero}</td>
-            <td>{meta.meta}</td>
-            <td>{meta.responsable}</td>
-            <td>{meta.plazo}</td>
+    <Container className="my-4">
+      <h2 className="text-center mb-4">Metas de Reciclaje</h2>
+
+      <Table striped bordered hover responsive>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Meta</th>
+            <th>Tipo</th>
+            <th>Progreso</th>
+            <th>Completado</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {metasPredefinidas.map((meta) => {
+            const progreso = calcularProgreso(meta.tipo, meta.objetivo);
+            const completado = progreso >= 100 ? "✅" : "⏳";
+
+            return (
+              <tr key={meta.id}>
+                <td>{meta.id}</td>
+                <td>{meta.descripcion}</td>
+                <td>{meta.tipo}</td>
+                <td>
+                  <ProgressBar now={progreso} label={`${progreso.toFixed(1)}%`} />
+                </td>
+                <td>{completado}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+    </Container>
   );
-};
-
-export default Metas;
-;
-
+}

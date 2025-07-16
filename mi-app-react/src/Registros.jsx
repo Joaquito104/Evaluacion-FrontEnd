@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
-function App() {
+function Registros() {
   const [material, setMaterial] = useState('');
   const [cantidad, setCantidad] = useState('');
   const [fecha, setFecha] = useState('');
@@ -119,4 +119,4 @@ function App() {
   );
 }
 
-export default App;
+export default Registros;

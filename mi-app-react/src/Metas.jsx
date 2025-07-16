@@ -1,4 +1,5 @@
 import React from 'react';
+import Registros from './Registros';
 
 const metas = [
   {

@@ -1,3 +1,4 @@
+//Modulo api local
 import { Container, Card, Row, Col } from "react-bootstrap";
 
 export default function Api() {
@@ -36,7 +37,7 @@ export default function Api() {
 
   return (
     <Container className="my-4">
-      <h2 className="text-center mb-4">Información Ambiental</h2>
+      <h2 className="text-center mb-4">Información Ambiental (Api)</h2>
 
       <Row>
         {datosAmbientales.map((item) => (

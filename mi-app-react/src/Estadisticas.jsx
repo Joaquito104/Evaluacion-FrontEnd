@@ -1,7 +1,22 @@
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Container, Row, Col, Card, ProgressBar, Alert } from 'react-bootstrap';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  ProgressBar,
+  Alert,
+} from "react-bootstrap";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -32,15 +47,16 @@ export default function Estadisticas() {
         label: "Kg reciclados por material",
         data: Object.values(totales),
         backgroundColor: ["#4caf50", "#2196f3", "#ff9800", "#e91e63", "#9c27b0"],
-        borderRadius: 8,
-        barPercentage: 0.5
+        borderRadius: 4,
+        barPercentage: 0.6,
+        categoryPercentage: 0.6,
       },
     ],
   };
 
   return (
-    <Container className="my-4">
-      <h2 className="text-center mb-4">Estadísticas de Reciclaje</h2>
+    <Container className="my-3" style={{ maxWidth: "1000px" }}>
+      <h2 className="text-center mb-3 fs-4">Estadísticas de Reciclaje</h2>
 
       {totalGeneral === 0 ? (
         <Alert variant="warning" className="text-center">
@@ -48,60 +64,63 @@ export default function Estadisticas() {
         </Alert>
       ) : (
         <>
-          <Row className="mb-4">
+          <Row className="mb-3 g-2">
             <Col md={4}>
-              <Card className="shadow-sm border-0 text-center bg-light">
-                <Card.Body>
-                  <Card.Title>Total Reciclado</Card.Title>
-                  <h3 className="fw-bold">{totalGeneral} kg</h3>
+              <Card className="shadow-sm border-0 text-center bg-dark text-white">
+                <Card.Body style={{ padding: "1rem" }}>
+                  <Card.Title className="fs-6">Total Reciclado</Card.Title>
+                  <h5 className="fw-bold">{totalGeneral} kg</h5>
                   <ProgressBar
                     now={totalGeneral > 100 ? 100 : totalGeneral}
                     label={`${totalGeneral} kg`}
                     striped
                     variant="success"
+                    style={{ height: "10px", fontSize: "0.7rem" }}
                   />
                 </Card.Body>
               </Card>
             </Col>
 
-            {Object.entries(totales).map(([tipo, cantidad]) => (
-              <Col md={4} key={tipo} className="mt-3 mt-md-0">
-                <Card className="shadow-sm border-0 text-center bg-white">
-                  <Card.Body>
-                    <Card.Title className="text-capitalize">{tipo}</Card.Title>
-                    <h4>{cantidad} kg</h4>
-                    <ProgressBar
-                      now={cantidad > 100 ? 100 : cantidad}
-                      label={`${cantidad} kg`}
-                      variant="info"
-                      striped
-                    />
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+            {Object.entries(totales).map(([tipo, cantidad]) => {
+              const porcentaje =
+                totalGeneral > 0 ? ((cantidad / totalGeneral) * 100).toFixed(1) : 0;
+              return (
+                <Col md={4} key={tipo}>
+                  <Card className="shadow-sm border-0 text-center bg-dark text-white">
+                    <Card.Body style={{ padding: "1rem" }}>
+                      <Card.Title className="fs-6 text-capitalize">{tipo}</Card.Title>
+                      <h6>{cantidad} kg ({porcentaje}%)</h6>
+                      <ProgressBar
+                        now={porcentaje}
+                        label={`${porcentaje}%`}
+                        variant="info"
+                        striped
+                        style={{ height: "10px", fontSize: "0.7rem" }}
+                      />
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
           </Row>
 
-          <Card className="p-3 shadow-sm border-0">
+          <Card className="p-2 shadow-sm border-0 bg-dark text-white">
             <Bar
               data={data}
               options={{
                 responsive: true,
                 plugins: {
-                  legend: { position: 'top' },
-                  title: { display: true, text: 'Distribución de Reciclaje por Material' },
+                  legend: { position: "top" },
+                  title: { display: false },
                 },
                 scales: {
-                  y: { beginAtZero: true },
+                  y: { beginAtZero: true, ticks: { font: { size: 10 } } },
+                  x: { ticks: { font: { size: 10 } } },
                 },
               }}
+              height={200}
             />
           </Card>
-
-          <div className="my-4">
-            <h5 className="text-center mb-2">Progreso General</h5>
-            <ProgressBar animated now={totalGeneral > 100 ? 100 : totalGeneral} label={`${totalGeneral} kg`} />
-          </div>
         </>
       )}
     </Container>

@@ -1,5 +1,19 @@
 import { useEffect, useState } from "react";
-import { Table, ProgressBar, Container } from "react-bootstrap";
+import { Table, Container } from "react-bootstrap";
+
+// Importa este CSS adicional o ponlo en tu archivo CSS principal
+const estilosBarra = {
+  height: '30px',          // barra más alta
+  minWidth: '50px',        // mínimo ancho visible
+  fontWeight: '600',
+  fontSize: '1rem',
+  color: 'white',
+  textShadow: '0 0 4px rgba(0,0,0,0.7)',
+};
+
+const estilosTabla = {
+  fontSize: '1.1rem',      // texto más grande en tabla
+};
 
 const metasPredefinidas = [
   { id: 1, descripcion: "Reciclar 50 kg de Plástico", tipo: "Plástico", objetivo: 50 },
@@ -28,10 +42,18 @@ export default function Metas() {
   };
 
   return (
-    <Container className="my-4">
-      <h2 className="text-center mb-4">Metas de Reciclaje</h2>
+    <Container className="my-4" style={{ maxWidth: '800px' }}>
+      <h2 className="text-center mb-4" style={{ fontSize: '2rem', fontWeight: '700' }}>
+        Metas de Reciclaje
+      </h2>
 
-      <Table striped bordered hover responsive>
+      <Table
+        striped
+        bordered
+        hover
+        responsive
+        style={estilosTabla}
+      >
         <thead>
           <tr>
             <th>ID</th>
@@ -44,6 +66,7 @@ export default function Metas() {
         <tbody>
           {metasPredefinidas.map((meta) => {
             const progreso = calcularProgreso(meta.tipo, meta.objetivo);
+            const progresoVisible = progreso < 5 && progreso > 0 ? 5 : progreso; // mínimo 5% visible
             const completado = progreso >= 100 ? "✅" : "⏳";
 
             return (
@@ -51,10 +74,38 @@ export default function Metas() {
                 <td>{meta.id}</td>
                 <td>{meta.descripcion}</td>
                 <td>{meta.tipo}</td>
-                <td>
-                  <ProgressBar now={progreso} label={`${progreso.toFixed(1)}%`} />
+                <td style={{ minWidth: '180px' }}>
+                  <div
+                    style={{
+                      backgroundColor: '#ddd',
+                      borderRadius: '15px',
+                      overflow: 'hidden',
+                      height: estilosBarra.height,
+                      position: 'relative',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${progresoVisible}%`,
+                        backgroundColor: progreso >= 100 ? '#4caf50' : '#2196f3',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        paddingRight: '8px',
+                        color: estilosBarra.color,
+                        fontWeight: estilosBarra.fontWeight,
+                        fontSize: estilosBarra.fontSize,
+                        textShadow: estilosBarra.textShadow,
+                        transition: 'width 0.6s ease',
+                        minWidth: '30px',
+                      }}
+                    >
+                      {progreso.toFixed(1)}%
+                    </div>
+                  </div>
                 </td>
-                <td>{completado}</td>
+                <td style={{ fontSize: '1.5rem', textAlign: 'center' }}>{completado}</td>
               </tr>
             );
           })}
